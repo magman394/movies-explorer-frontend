@@ -1,0 +1,104 @@
+.element {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  height: 100%;
+  object-fit: cover;
+  justify-self: center;
+  margin-bottom: 30px;
+  background-color: #FAFAFA;
+}
+
+.element__title {
+  display: flex;
+  margin: 0;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  color: #000000;
+}
+.element__likes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+
+}
+.element__likes_like-btn {
+  margin-left: auto;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background-image: url(../../../images/like.svg);
+  background-color: white;
+  padding: 0;
+  outline: none;
+  opacity: 1;
+  transition: opacity 0.4s ease-in-out;
+}
+.element__likes_like-btn-delete {
+  margin-left: auto;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: no-repeat center/50% url(../../../images/close.svg);
+  background-color: white;
+  padding: 0;
+  outline: none;
+  opacity: 1;
+  transition: opacity 0.4s ease-in-out;
+}
+.element__likes_like-btn:hover {
+  cursor: pointer;
+  opacity: 0.5;
+}
+.element__likes_like-btn:focus {
+  opacity: 1;
+}
+.element__likes_active {
+  background-image: url(../../../images/like-active.svg);
+  overflow: hidden;
+  opacity: 1;
+  }
+.element__info {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  padding: 8px 16px 18px;
+  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.08);
+  border-radius: 0px 0px 10px 10px;
+}
+.element__image {
+    max-width: 100%;
+    object-fit: cover;
+}
+.element__time-movie {
+  display: flex;
+  margin: 0;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 11px;
+  line-height: 13px;
+  color: #A0A0A0;
+  padding-top: 10px;
+}       
+
+@media (min-width: 1281px) {
+  .element {
+    min-width: 420px;
+    height: 100%;
+  }
+}
+@media (max-width: 768px) {
+  .element__info {
+    padding: 8px 16px 13px;
+  }
+}
+@media (max-width: 450px) {
+  .element {
+    margin-bottom: 10px;
+  }
+}

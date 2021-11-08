@@ -1,0 +1,26 @@
+.switch {
+  display: flex;
+  justify-content: center;
+  padding: 28px 0 39px;
+  border-bottom: solid 1px #E8E8E8;
+  margin-bottom: 28px;
+}
+.switch__text {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 18px;
+  color: #000000;
+  margin-left: 12px;
+}
+@media (max-width: 768px) {
+  .switch {
+    padding: 39px 0 39px;
+  }
+}
+@media (max-width: 480px) {
+  .switch {
+    padding: 43px 0 60px;
+  }
+}

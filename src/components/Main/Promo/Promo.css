@@ -1,0 +1,138 @@
+.promo {
+  background-color: #DDDEE3;
+  margin: 0 -70px;
+}
+.promo__header {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  max-height: 74px;
+  padding: 18px 0;
+}
+.promo__logo {
+  width: 38px;
+  height: 38px;
+  background-image: url(../../../logo.svg);
+  background-repeat: no-repeat;
+  margin: 0 70px;
+}
+.promo__nav {
+    display: flex;
+    position: relative;
+    padding: 3px 70px 3px;
+}
+.promo__reg-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  text-decoration: none;
+  margin-right: 30px;
+}
+.promo__auth-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  min-width: 76px;
+  font-size: 12px;
+  line-height: 16px;
+  color: rgb(255, 255, 255);
+  background-color: #3456F3;
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: 3px;
+}
+.promo__banner {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 82px 0 122px;
+}
+.promo__banner_title {
+  display: flex;
+  justify-content: space-around;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 50px;
+  line-height: 58px;
+  text-align: center;
+  letter-spacing: -0.04em;
+  position: absolute;
+  opacity: 1;
+  z-index: 1;
+  max-width: 730px;
+  margin: 0;
+}
+.promo__banner_img {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  text-decoration: none;
+  background-size: cover;
+  max-width: 320px;
+  min-height: 320px;
+}
+
+@media (max-width: 768px) {
+  .promo {
+    margin: 0 -50px;
+  }
+  .promo__logo {
+    margin: 0 30px;
+  }
+  .promo__nav {
+    padding: 0 30px;
+  }
+  .promo__banner {
+    padding: 224px 0 240px;
+  }
+}
+@media (max-width: 700px) {
+  .promo__header {
+    padding: 20px 0;
+  }
+  .promo__banner_title {
+    font-size: 31px;
+    line-height: 39px;
+  }
+  .promo {
+    margin: 0 -10px;
+  }
+  .promo__banner_img {
+    max-width: 240px;
+    min-height: 240px;
+  }
+  .promo__banner {
+    padding: 142px 0 180px;
+  }
+  .promo__reg-link {
+    font-size: 10px;
+    max-height: 34px;
+    margin-right: 14px;
+  }
+  .promo__auth-link {
+    font-size: 10px;
+    min-width: 54px;
+    max-height: 34px;
+  }
+  .promo__logo {
+    margin: 0 14px;
+  }
+  .promo__nav {
+    padding: 0 14px;
+  }
+}
