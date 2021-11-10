@@ -5,7 +5,11 @@ function SearchForm(props) {
 
     return (
       <div className="search">
-        <form className="search__form" onSubmit={props.handleSubmit}>
+        <form
+          className="search__form"
+          onSubmit={props.handleSubmit}
+          required
+        >
         <input
           className="search__input"
           name="movies"

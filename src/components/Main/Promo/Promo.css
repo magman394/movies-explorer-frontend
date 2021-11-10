@@ -50,6 +50,11 @@
   cursor: pointer;
   text-decoration: none;
   border-radius: 3px;
+  opacity: 1;
+  transition: opacity 0.4s ease-in-out;
+}
+.promo__auth-link:hover {
+  opacity: 0.8;
 }
 .promo__banner {
   position: relative;
@@ -102,6 +107,9 @@
   }
 }
 @media (max-width: 700px) {
+  .promo {
+    margin: 0 -30px;
+  }
   .promo__header {
     padding: 20px 0;
   }
@@ -109,9 +117,7 @@
     font-size: 31px;
     line-height: 39px;
   }
-  .promo {
-    margin: 0 -10px;
-  }
+
   .promo__banner_img {
     max-width: 240px;
     min-height: 240px;
@@ -134,5 +140,10 @@
   }
   .promo__nav {
     padding: 0 14px;
+  }
+}
+@media (max-width: 480px) {
+  .promo {
+    margin: 0 -10px;
   }
 }
