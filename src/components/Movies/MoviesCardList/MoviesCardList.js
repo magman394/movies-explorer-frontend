@@ -9,8 +9,10 @@ function MoviesCardList({
   handleCardLike,
   onCardDelete,
   savefilms,
+  isShortFilms,
 }) {
 
+  const sortfilm = filtredMovies.filter(movie => movie.duration < 40);
 
     const getWidth = () => {
         if (window.innerWidth < 680) {
@@ -40,13 +42,14 @@ function MoviesCardList({
 
         { filtredMovies !== null && filtredMovies.length > 0 ?
           <section className="elements">
-            { 
+            { !isShortFilms ?
             filtredMovies.slice(0, listItems).map((item) => {
               filtredMovies
               .filter(e => savefilms.map(e2 => e2.movieId).includes(e.id))
               .map(e => {
                 e.isLiked = true
               });
+          
               return (
                   <MoviesCard
                     onCardClick={onCardClick}
@@ -56,7 +59,25 @@ function MoviesCardList({
                     onCardDelete={onCardDelete}
                   />
               );
-            }) }
+            }) : 
+            sortfilm.slice(0, listItems).map((item) => {
+              filtredMovies
+              .filter(e => savefilms.map(e2 => e2.movieId).includes(e.id))
+              .map(e => {
+                e.isLiked = true
+              });
+          
+              return (
+                  <MoviesCard
+                    onCardClick={onCardClick}
+                    key={item.id}
+                    {...item}
+                    onCardLike={handleCardLike}
+                    onCardDelete={onCardDelete}
+                  />
+              );
+            })
+            }
           </section>
            : isGetMovies === true ? 
            <h2 className="elements__not-found">Ничего не найдено</h2> : '' 

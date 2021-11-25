@@ -4,14 +4,13 @@ import Preloader from "../../Movies/Preloader/Preloader"
 
 function SavedMoviesCardList({
   onCardClick,
-  filtredMovies,
   isGetMovies,
   handleCardLike,
   onCardDelete,
   savefilms,
+  isShortFilms,
 }) {
-
-
+  const sortfilm = savefilms.filter(movie => movie.duration < 40);
     const getWidth = () => {
         if (window.innerWidth < 680) {
             return 5;
@@ -40,7 +39,7 @@ function SavedMoviesCardList({
 
         { savefilms !== null && savefilms.length > 0 ?
           <section className="elements">
-            { 
+            { !isShortFilms ?
             savefilms.slice(0, listItems).map((item) => {
               return (
                   <SavedMoviesCard
@@ -51,7 +50,19 @@ function SavedMoviesCardList({
                     onCardDelete={onCardDelete}
                   />
               );
-            }) }
+            }) :
+            sortfilm.slice(0, listItems).map((item) => {
+              return (
+                  <SavedMoviesCard
+                    onCardClick={onCardClick}
+                    key={item._id}
+                    {...item}
+                    onCardLike={handleCardLike}
+                    onCardDelete={onCardDelete}
+                  />
+              );
+            })
+            }
           </section>
            : isGetMovies === true ? 
            <h2 className="elements__not-found">Ничего не найдено</h2> : '' 

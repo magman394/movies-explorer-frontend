@@ -4,6 +4,7 @@ import Navigation from '../Navigation/Navigation';
 import { Route, Switch, useHistory, Redirect } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import SearchForm from "../Movies/SearchForm/SearchForm";
+import SavedSearchForm from "../../components/SavedMovies/SavedSearchForm/SavedSearchForm";
 import MoviesCardList from "../Movies/MoviesCardList/MoviesCardList";
 import SavedMoviesCardList from "../SavedMovies/SavedMoviesCardList/SavedMoviesCardList";
 import Promo from "../Main/Promo/Promo";
@@ -46,6 +47,7 @@ function App() {
   };
   const [isEditNavigationOpen, setEditNavigationOpen] =
     React.useState(false);
+  const [changeShortFilm, setChangeShortFilm] = React.useState();
   const [searchMovies, setSearchMovies] = React.useState(JSON.parse(localStorage.getItem('search')));
   const [filtredMovies, setFiltredMovies] = React.useState(JSON.parse(localStorage.getItem('films')));
   const [isGetMovies, setGetMovies] = React.useState(false);
@@ -64,6 +66,7 @@ function App() {
           localStorage.setItem('email', res.email);
       } else {history.push("/signin")}
     })
+    .catch((err) => alert(err));
     if (loggedIn === true) {
     mainApi
     .getSaveMovies(jwt)
@@ -159,6 +162,16 @@ function App() {
       }
 
   }
+  const handleSavedMovies = (e) => {
+    e.preventDefault();
+    if(searchMovies.length > 1) {
+      setSavefilms(
+        savefilms.filter((item) => {
+        return item.nameRU.includes(searchMovies);
+      })
+      )
+     }
+  }
 
   localStorage.setItem('search', JSON.stringify(searchMovies));
   function handleCardLike(
@@ -237,36 +250,8 @@ function App() {
   }
 
 
-const [change, setchange] = React.useState()
   function handleChangeShortFilmsFilter(change)  {
-    setchange(change)
-    if (!change) {
-      localStorage.removeItem('films', JSON.stringify(filtredMovies));
-      moviesApi
-          .getMovies()
-          .then((films) => {
-            films.map(e => {
-              e.isLiked = false
-            })
-              setFiltredMovies(
-                films.filter((item) => {
-                return item.nameRU.includes(searchMovies);
-              })
-              )
-        })
-          .catch((err) => alert(err));
-          mainApi
-          .getSaveMovies(jwt)
-          .then((films) => {
-            setSavefilms(films);
-          })
-          .catch((err) => alert(err));
-         
-    }
-    setFiltredMovies(filtredMovies.filter(movie => movie.duration < 40));
-    localStorage.setItem('films', JSON.stringify(filtredMovies));
-    setSavefilms(savefilms.filter(movie => movie.duration < 40));
-    localStorage.setItem('savefilms', JSON.stringify(savefilms));
+    setChangeShortFilm(change)
   }
 
   return (
@@ -306,6 +291,7 @@ const [change, setchange] = React.useState()
           onSetSearchMovies={setSearchMovies}
         />
         <MoviesCardList
+          isShortFilms={changeShortFilm}
           savefilms={savefilms}
           filtredMovies={filtredMovies}
           searchMovies={searchMovies}
@@ -320,19 +306,18 @@ const [change, setchange] = React.useState()
           onMenu={handleNavigationSubmit}
           onNavigation={closeNavigation}
         />
-        <SearchForm
+        <SavedSearchForm
           onShortFilms={handleChangeShortFilmsFilter}
-          onHandleMovies={handleMovies}
-          onChange={setSearchMovies}
+          onHandleMovies={handleSavedMovies}
+          onSetSearchMovies={setSearchMovies}
         />
         <SavedMoviesCardList
+          isShortFilms={changeShortFilm}
           savefilms={savefilms}
-          onCardClick={1}
           filtredMovies={filtredMovies}
           searchMovies={searchMovies}
           isGetMovies={isGetMovies}
           handleCardLike={handleCardLike}
-          onCardDelete={1}
         />
       <Footer />
       </Route>

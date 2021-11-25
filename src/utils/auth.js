@@ -53,6 +53,8 @@ class Auth {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            "Access-Control-Request-Headers": "*",
+            "Access-Control-Request-Method": "*",
             'Authorization': `Bearer ${token}`,
           }
         })
