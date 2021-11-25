@@ -10,7 +10,7 @@ function SavedMoviesCardList({
   savefilms,
   isShortFilms,
 }) {
-  const sortfilm = savefilms.filter(movie => movie.duration < 40);
+  const sortfilm = savefilms !== null ? savefilms.filter(movie => movie.duration < 40) : savefilms
     const getWidth = () => {
         if (window.innerWidth < 680) {
             return 5;

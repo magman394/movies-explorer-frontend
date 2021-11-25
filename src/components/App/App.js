@@ -67,14 +67,6 @@ function App() {
       } else {history.push("/signin")}
     })
     .catch((err) => alert(err));
-    if (loggedIn === true) {
-    mainApi
-    .getSaveMovies(jwt)
-    .then((films) => {
-      setSavefilms(films);
-    })
-    .catch((err) => alert(err));
-  }
   }, [loggedIn]);
 
   const handleRegisterSubmit = (onRegister) => {
