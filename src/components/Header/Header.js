@@ -10,8 +10,8 @@ function Header(props) {
         <header className="header">
         <Link className="header__logo" to='/main'></Link>
           <nav className='header__nav'>
-            <Link className={(location.pathname === "/movies") ? 'header__link header__link_active' : 'header__link'} to='saved-movies'>Фильмы</Link>
-            <Link className={(location.pathname === "/saved-movies") ? 'header__link header__link_active' : 'header__link'} to='movies'>Сохранённые фильмы</Link>
+            <Link className={(location.pathname === "/movies") ? 'header__link header__link_active' : 'header__link'} to='movies'>Фильмы</Link>
+            <Link className={(location.pathname === "/saved-movies") ? 'header__link header__link_active' : 'header__link'} to='saved-movies'>Сохранённые фильмы</Link>
           </nav>
           <div className='header__account'>
             <img
