@@ -1,8 +1,8 @@
 import {React, useState, useEffect, Suspense, lazy} from "react";
-const MoviesCard = lazy(() => import('../MoviesCard/MoviesCard'));
-import Preloader from "../Preloader/Preloader"
+const SavedMoviesCard = lazy(() => import('../../SavedMovies/SavedMoviesCard/SavedMoviesCard'));
+import Preloader from "../../Movies/Preloader/Preloader"
 
-function MoviesCardList({
+function SavedMoviesCardList({
   onCardClick,
   filtredMovies,
   isGetMovies,
@@ -38,19 +38,14 @@ function MoviesCardList({
     <Suspense fallback={<Preloader/>}>
       <main className="content">
 
-        { filtredMovies !== null && filtredMovies.length > 0 ?
+        { savefilms !== null && savefilms.length > 0 ?
           <section className="elements">
             { 
-            filtredMovies.slice(0, listItems).map((item) => {
-              filtredMovies
-              .filter(e => savefilms.map(e2 => e2.movieId).includes(e.id))
-              .map(e => {
-                e.isLiked = true
-              });
+            savefilms.slice(0, listItems).map((item) => {
               return (
-                  <MoviesCard
+                  <SavedMoviesCard
                     onCardClick={onCardClick}
-                    key={item.id}
+                    key={item._id}
                     {...item}
                     onCardLike={handleCardLike}
                     onCardDelete={onCardDelete}
@@ -61,7 +56,7 @@ function MoviesCardList({
            : isGetMovies === true ? 
            <h2 className="elements__not-found">Ничего не найдено</h2> : '' 
         }
-        <section className={`more${filtredMovies !== null && filtredMovies.length > listItems  ? "" : " more_hidden"}`}>
+        <section className={`more${savefilms !== null && savefilms.length > listItems  ? "" : " more_hidden"}`}>
             <button
               className="more__button"
               onClick={() => setListItems(listItems + listItems)}
@@ -73,4 +68,4 @@ function MoviesCardList({
     </Suspense>
   );
 }
-export default MoviesCardList;
+export default SavedMoviesCardList;

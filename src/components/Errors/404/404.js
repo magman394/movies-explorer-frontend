@@ -10,7 +10,7 @@ function Error404() {
         <div className="error-404">
             <h1 className="error-404__title">404</h1>
             <p className="error-404__text">Страница не найдена</p>
-            <botton className="error-404__link" onClick={handleClick}>Назад</botton>
+            <button type="button" className="error-404__link" onClick={handleClick}>Назад</button>
         </div>
     );
 }

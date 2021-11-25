@@ -1,28 +1,36 @@
 import React from "react";
 import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
 
-function SearchForm(props) {
-
+function SearchForm({ onSetSearchMovies, onHandleMovies, onShortFilms }) {
     return (
       <div className="search">
         <form
           className="search__form"
-          onSubmit={props.handleSubmit}
-          required
+          onSubmit={onHandleMovies}
         >
         <input
           className="search__input"
-          name="movies"
+          id="Movies"
+          name="Movies"
           placeholder="Фильм"
           type="text"
-          ref={props.input} />
-      <botton
-        className="search__form_botton"
+          onChange={(e) => {
+            onSetSearchMovies(e.target.value);
+          }}
+          minLength="2"
+          maxLength="40"
+          required
+          />
+          <span id="Movies-error" className="form__error">Минимальная длина 2 символа.</span>
+      <button
+        className="search__form_button"
         type="submit"
-        onClick={props.Search}
-     />
+        onClick={onHandleMovies}
+      />
     </form>
-        <FilterCheckbox />
+        <FilterCheckbox 
+        onShortFilms={onShortFilms}
+        />
       </div>
   );
 }

@@ -1,21 +1,23 @@
 import React from "react";
-import { linkMovies } from "../../../utils/constants";
 
-function MoviesCard({
-  trailerLink,
-  image,
-  nameRU,
+
+function SavedMoviesCard({
   country,
-  onCardLike,
-  duration,
-  id,
   director,
+  duration,
   year,
   description,
+  image,
+  trailer,
+  nameRU,
   nameEN,
+  movieId,
   isLiked,  
+  thumbnail,
+  onCardLike
 }) {
-  const thumbnail = linkMovies + image.formats.thumbnail.url;
+  isLiked = true;
+  const trailerLink = trailer;
   function handleClick() {
     open(trailerLink);
   }
@@ -31,8 +33,8 @@ function MoviesCard({
       trailerLink,
       nameRU,
       nameEN,
-      id,
-      isLiked,
+      movieId,
+      isLiked,  
       thumbnail
     );
   }
@@ -41,18 +43,13 @@ function MoviesCard({
   	let minutes = duration % 60;
 
 
-  const cardLikeButtonClassName = `${
-    isLiked
-      ? "element__likes_active element__likes_like-btn"
-      : "element__likes element__likes_like-btn"
-  }`;
   
   return (
     <div className="elements__box">
       <div className="element">
         <img
           className="element__image"
-          src={linkMovies + image.url}
+          src={image}
           onClick={handleClick}
           alt={nameRU}
         />
@@ -61,7 +58,7 @@ function MoviesCard({
             <span className="element__title">{nameRU}</span>
             <button
               type="button"
-              className={cardLikeButtonClassName}
+              className="element__likes element__likes_like-btn-delete"
               onClick={handleLikeClick}
             ></button>
           </div>
@@ -72,4 +69,4 @@ function MoviesCard({
   );
 }
 
-export default MoviesCard;
+export default SavedMoviesCard;

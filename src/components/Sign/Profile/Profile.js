@@ -1,37 +1,73 @@
 import React from "react";
+import { FormErrors } from '../FormErrors/FormErrors';
+import { Link } from "react-router-dom";
 
-
-function Profile({ name, email, Relogin }) {
-
-  const [editname, setName] = React.useState(name);
-  const [editmail, setMail] = React.useState(email);
-  function handleChangeName(e) {
-    e.preventDefault();
-    setName(e.target.value);
+class Profile extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: props.editProfileName,
+      email: props.editProfileEmail,
+      formErrors: {name: '', email: ''},
+      nameValid: false,
+      emailValid: false,
+      formValid: false,
+    };
+    this.onEditProfile = props.onEditProfile;
+    this.onRelogin = props.Relogin;
+    this.handleUserInput = this.handleUserInput.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
-  function handleChangeDescription(e) {
-    e.preventDefault();
-    setMail(e.target.value);
+  
+  handleUserInput(e) {
+    const { name, value } = e.target;
+    this.setState({[name]: value},
+      () => { this.validateField(name, value) });
+  }
+  validateField(fieldName, value) {
+    let fieldValidationErrors = this.state.formErrors;
+    let nameValid = this.state.nameValid;
+    let emailValid = this.state.emailValid;
+
+    switch(fieldName) {
+      case 'name':
+        nameValid = value.match(/^([а-яё\s]+|[a-z\s]+)$/iu);
+        fieldValidationErrors.name = nameValid ? '' : 'Имя может содержать или только латиницу или только кириллицу, пробел или дефис!';
+        break;
+      case 'email':
+        emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+        fieldValidationErrors.email = emailValid ? '' : 'Почта введена не верно!';
+        break;
+    }
+    this.setState({formErrors: fieldValidationErrors,
+                    nameValid: nameValid,
+                    emailValid: emailValid,
+                  }, this.validateForm);
+  }
+  validateForm() {
+    this.setState({formValid: this.state.nameValid || this.state.emailValid});
   }
 
-  React.useEffect(() => {
-    setName(name);
-    setMail(email);
-  }, [email, name]);
-
-  function handleSubmit(e) {
-    e.preventDefault();
+  errorClass(error) {
+    return(error.length === 0 ? '' : 'has-error');
   }
 
+  handleSubmit(e) {
+    e.preventDefault();
+    const { email, name } = this.state;
+    this.onEditProfile({ email, name });
+  }
+
+render() {
   return (
     <div className="profile">
-      <form onSubmit={handleSubmit} className="profile__form">
-        <h2 className="profile__title">Привет, {name}!</h2>
+      <form onSubmit={this.handleSubmit} className="profile__form">
+        <h2 className="profile__title">Привет, {this.state.name}!</h2>
         <fieldset className="profile__input_name">
-          <label className="profile__input_lebel" for="name">Имя</label>
+          <label className="profile__input_lebel">Имя</label>
           <input
-            value={editname}
-            onChange={handleChangeName}
+            value={this.state.name}
+            onChange={this.handleUserInput}
             name="name"
             id="name"
             type="text"
@@ -44,10 +80,10 @@ function Profile({ name, email, Relogin }) {
         </fieldset>
         <span id="name-error" className="profile__error"></span>
         <fieldset className="profile__input_email">
-          <label className="profile__input_lebel" for="email">E-mail</label>
+          <label className="profile__input_lebel">E-mail</label>
           <input
-            value={editmail}
-            onChange={handleChangeDescription}
+            value={this.state.email}
+            onChange={this.handleUserInput}
             name="email"
             id="email"
             type="text"
@@ -59,14 +95,16 @@ function Profile({ name, email, Relogin }) {
           />
         </fieldset>
         <span id="email-error" className="profile__error"></span>
-        <button onClick={true} type="submit" className="profile__edit-button">
+        <FormErrors formErrors={this.state.formErrors} />
+        <button onClick={this.onEditProfile} type="submit" className={this.state.formValid ? "profile__edit-button" : "profile__edit-button_disabled"} disabled={!this.state.formValid}>
           Редактировать
         </button>
-        <button className='profile__exit-button' onClick={Relogin}>
+        <button className='profile__exit-button' onClick={this.onRelogin}>
           Выйти из аккаунта
         </button>
       </form>
     </div>
   );
+}
 }
 export default Profile;

@@ -1,0 +1,10 @@
+.formErrors {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 12px;
+    color: #e95454;
+    text-align: center;
+    margin-bottom: 10px;
+}

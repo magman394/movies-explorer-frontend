@@ -7,6 +7,7 @@
 }
 .profile__form {
   font-family: Inter;
+  max-width: 400px;
   font-style: normal;
   font-weight: 400;
   font-size: 11px;
@@ -58,6 +59,20 @@
   background: none;
   border: none;
   margin-bottom: 16px;
+  cursor: pointer;
+  color: #34ee88;
+}
+.profile__edit-button_disabled {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 16px;
+  background: none;
+  border: none;
+  margin-bottom: 16px;
+  cursor: pointer;
+  color: #EE3465;
 }
 .profile__exit-button {
   font-family: Inter;
@@ -68,6 +83,7 @@
   background: none;
   border: none;
   color: #EE3465;
+  cursor: pointer;
 }
 @media (max-width: 768px) {
   .profile {

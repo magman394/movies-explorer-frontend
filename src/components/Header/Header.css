@@ -26,6 +26,18 @@
     cursor: pointer;
     text-decoration: none;
 }
+.header__link_profile {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  text-align: right;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+}
 .header__link:first-child {
     margin-right: 18px;
 }
@@ -49,6 +61,11 @@
     padding-right: 8px;
     max-width: 12px;
     height: 14px;
+    border: none;
+}
+.header__botton {
+  border: none;
+  background: none;
 }
 .header__menu {
     margin: 0;

@@ -33,15 +33,16 @@
 .search__input:focus::placeholder {
     color: transparent;
 }
-.search__form_botton {
+.search__form_button {
     min-width: 44px;
     height: 44px;
     background-image: url('../../../images/input-submit.svg');
     opacity: 1;
     transition: opacity 0.4s ease-in-out;
     cursor: pointer;
+    border: none;
 }
-.search__form_botton:hover {
+.search__form_button:hover {
     opacity: 0.8;
 }
   @media (max-width: 480px) {
@@ -49,3 +50,15 @@
         margin: 70px 0 0;
     }
   }
+
+.form__error {
+	color: red;
+	text-align: left;
+	font-size: 12px;
+	display: block;
+	margin-top: 3px;
+	display: none;
+}
+input:invalid:not(:placeholder-shown) + .form__error {
+	display: block;
+}

@@ -1,10 +1,11 @@
 import React from "react";
 import Header from '../Header/Header';
 import Navigation from '../Navigation/Navigation';
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, useHistory, Redirect } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import SearchForm from "../Movies/SearchForm/SearchForm";
 import MoviesCardList from "../Movies/MoviesCardList/MoviesCardList";
+import SavedMoviesCardList from "../SavedMovies/SavedMoviesCardList/SavedMoviesCardList";
 import Promo from "../Main/Promo/Promo";
 import NavTab from "../Main/NavTab/NavTab";
 import AboutProject from "../Main/AboutProject/AboutProject";
@@ -15,12 +16,216 @@ import Register from "../Sign/Register/Register";
 import Login from "../Sign/Login/Login";
 import Profile from "../Sign/Profile/Profile";
 import Error404 from "../Errors/404/404";
-import { cards } from "../../utils/constants";
-
-
+import moviesApi from "../../utils/MoviesApi";
+import mainApi from "../../utils/MainApi";
+import auth from "../../utils/auth";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
+import { linkMovies } from "../../utils/constants";
+import {
+  CurrentUserContext,
+  defaultUser,
+} from "../contexts/CurrentUserContext";
+import error from "../../images/error.svg";
+import ok from "../../images/ok.svg";
 function App() {
+  const [isAddRegister, setAddRegister] = React.useState(false);
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [selectedEmail, setSelectedEmail] = React.useState(localStorage.getItem('email'));
+  const [selectedName, setSelectedName] = React.useState(localStorage.getItem('name'));
+
+  
+  const [currentUser, setCurrentUser] = React.useState(defaultUser);
+  const history = useHistory();
+  const [isEditRegisterPopupOpen, setEditRegisterPopupOpen] =
+  React.useState(false);
+  const [isInfoTool, setInfoTool] = React.useState({ text: null, img: null });
+  const closeAllPopups = () => {
+    setEditRegisterPopupOpen(false);
+    if (isAddRegister === true) history.push("/signin");
+    setInfoTool({ text: null, img: null });
+  };
   const [isEditNavigationOpen, setEditNavigationOpen] =
     React.useState(false);
+  const [searchMovies, setSearchMovies] = React.useState(JSON.parse(localStorage.getItem('search')));
+  const [filtredMovies, setFiltredMovies] = React.useState(JSON.parse(localStorage.getItem('films')));
+  const [isGetMovies, setGetMovies] = React.useState(false);
+  const [savefilms, setSavefilms] = React.useState(JSON.parse(localStorage.getItem('savefilms')));
+
+
+
+  const jwt = localStorage.getItem('token');
+  React.useEffect(() => {
+    auth
+      .authorizeToken(jwt)
+      .then((res) => {
+      if (res){
+          setLoggedIn(true);
+          localStorage.setItem('name', res.name);
+          localStorage.setItem('email', res.email);
+      } else {history.push("/signin")}
+    })
+    if (loggedIn === true) {
+    mainApi
+    .getSaveMovies(jwt)
+    .then((films) => {
+      setSavefilms(films);
+    })
+    .catch((err) => alert(err));
+  }
+  }, [loggedIn]);
+
+  const handleRegisterSubmit = (onRegister) => {
+    auth
+      .register(onRegister)
+      .then(() => {
+        setInfoTool({ text: "Вы успешно зарегистрировались!", img: ok });
+        setEditRegisterPopupOpen(true);
+        history.push("/signin");
+
+      })
+      .catch(() => {
+        setInfoTool({
+          text: "Что-то пошло не так! Попробуйте ещё раз.",
+          img: error,
+        });
+        setEditRegisterPopupOpen(true);
+      });
+  };
+
+  const handleAuthorizeSubmit = (onLogin) => {
+    if (!onLogin) {
+      return;
+
+    }
+    auth
+      .authorize(onLogin)
+      .then((data) => {
+        if (data.token) {
+          setLoggedIn(true);
+          history.push("/movies");
+        }
+      })
+      .catch(() => {
+        setLoggedIn(false);
+        setEditRegisterPopupOpen(true);
+        setInfoTool({
+          text: "Что-то пошло не так! Попробуйте ещё раз.",
+          img: error,
+        });
+      });
+  };
+
+  function onEditProfile(currentUser) {
+
+    mainApi
+      .setUserInfo(currentUser, jwt)
+      .then((response) => {
+        setCurrentUser(response);
+        localStorage.setItem('name', response.name);
+        localStorage.setItem('email', response.email);
+        setInfoTool({ text: "Профиль изменен", img: ok });
+        setEditRegisterPopupOpen(true);
+      })
+      .catch(() => {
+        setInfoTool({
+          text: "Что-то пошло не так! Попробуйте ещё раз.",
+          img: error,
+        });
+      });
+  }
+  function handleReloginSubmit() {
+    localStorage.removeItem("token");
+    history.push("/signin");
+    setLoggedIn(false);
+  }
+
+  const handleMovies = (e) => {
+    e.preventDefault();
+    if(searchMovies.length > 1) {
+    moviesApi
+        .getMovies()
+        .then((films) => {
+          films.map(e => {
+            e.isLiked = false
+          })
+            setFiltredMovies(
+              films.filter((item) => {
+              return item.nameRU.includes(searchMovies);
+            })
+            )
+
+        })
+        .catch((err) => alert(err));
+      }
+
+  }
+
+  localStorage.setItem('search', JSON.stringify(searchMovies));
+  function handleCardLike(
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailerLink,
+    nameRU,
+    nameEN,
+    id,
+    isLiked,
+    thumbnail
+  ) {
+    mainApi
+    .getUserInfo(jwt)
+    .then((user) => {
+      setCurrentUser(user);
+    })
+    .catch((err) => alert(err));
+    setGetMovies(true)
+
+    mainApi
+      .changeLikeCardStatus({   
+        country: country ? country : 'пусто',
+        director: director ? director : 'пусто',
+        duration: duration ? duration : 'пусто',
+        year: year ? year : 'пусто',
+        description: description ? description : 'пусто',
+        image: linkMovies + image.url,
+        trailer: trailerLink ? trailerLink : 'пусто',
+        nameRU: nameRU,
+        nameEN: nameEN ? nameEN : 'пусто',
+        thumbnail: thumbnail,
+        movieId: id,
+        user: currentUser,
+      }, !isLiked, jwt)
+      .then((send) => {
+
+        mainApi
+          .getSaveMovies(jwt)
+          .then((films) => {
+            setSavefilms(films);
+          })
+          .catch((err) => alert(err));
+        moviesApi
+          .getMovies()
+          .then((films) => {
+            films.map(e => {
+              e.isLiked = false
+            })
+              setFiltredMovies(
+                films.filter((item) => {
+                return item.nameRU.includes(searchMovies);
+              })
+              )
+        })
+          .catch((err) => alert(err));
+          
+      })
+      .catch((err) => alert(err));
+  }
+  localStorage.setItem('films', JSON.stringify(filtredMovies));
+  localStorage.setItem('savefilms', JSON.stringify(savefilms));
+
   const handleNavigationSubmit = () => {
     setEditNavigationOpen(true)
   }
@@ -30,10 +235,52 @@ function App() {
   const closeAll = () => {
     setEditNavigationOpen(false)
   }
+
+
+const [change, setchange] = React.useState()
+  function handleChangeShortFilmsFilter(change)  {
+    setchange(change)
+    if (!change) {
+      localStorage.removeItem('films', JSON.stringify(filtredMovies));
+      moviesApi
+          .getMovies()
+          .then((films) => {
+            films.map(e => {
+              e.isLiked = false
+            })
+              setFiltredMovies(
+                films.filter((item) => {
+                return item.nameRU.includes(searchMovies);
+              })
+              )
+        })
+          .catch((err) => alert(err));
+          mainApi
+          .getSaveMovies(jwt)
+          .then((films) => {
+            setSavefilms(films);
+          })
+          .catch((err) => alert(err));
+         
+    }
+    setFiltredMovies(filtredMovies.filter(movie => movie.duration < 40));
+    localStorage.setItem('films', JSON.stringify(filtredMovies));
+    setSavefilms(savefilms.filter(movie => movie.duration < 40));
+    localStorage.setItem('savefilms', JSON.stringify(savefilms));
+  }
+
   return (
     <div className="App">
+    <CurrentUserContext.Provider value={currentUser}>
+
       <Switch>
-      <Route path="/main">
+      <Route exact path="/">
+        {loggedIn ? <Redirect to="/main" /> : <Redirect to="/signin" />}
+      </Route>
+      <Route
+      path="/main"
+      loggedIn={loggedIn}
+      >
         <Promo />
         <NavTab />
         <AboutProject />
@@ -42,7 +289,8 @@ function App() {
         <Portfolio />
         <Footer />
       </Route>
-      <Route path="/movies">
+
+      <Route exact path="/movies">
         <Header
           Relogin={true}
           onMenu={handleNavigationSubmit}
@@ -52,12 +300,17 @@ function App() {
           isOpen={isEditNavigationOpen}
           onClose={closeAll}
         />
-        <SearchForm />
+        <SearchForm
+          onShortFilms={handleChangeShortFilmsFilter}
+          onHandleMovies={handleMovies}
+          onSetSearchMovies={setSearchMovies}
+        />
         <MoviesCardList
-          onCardClick={1}
-          cards={cards}
-          onCardLike={0}
-          onCardDelete={1}
+          savefilms={savefilms}
+          filtredMovies={filtredMovies}
+          searchMovies={searchMovies}
+          isGetMovies={isGetMovies}
+          handleCardLike={handleCardLike}
         />
         <Footer />
       </Route>
@@ -67,32 +320,61 @@ function App() {
           onMenu={handleNavigationSubmit}
           onNavigation={closeNavigation}
         />
-        <SearchForm />
-        <MoviesCardList
+        <SearchForm
+          onShortFilms={handleChangeShortFilmsFilter}
+          onHandleMovies={handleMovies}
+          onChange={setSearchMovies}
+        />
+        <SavedMoviesCardList
+          savefilms={savefilms}
           onCardClick={1}
-          cards={cards}
-          onCardLike={0}
+          filtredMovies={filtredMovies}
+          searchMovies={searchMovies}
+          isGetMovies={isGetMovies}
+          handleCardLike={handleCardLike}
           onCardDelete={1}
         />
       <Footer />
       </Route>
-      <Route path="/signup">
-        <Register />
-      </Route>
-      <Route path="/signin">
-        <Login />
-      </Route>
       <Route path="/profile">
         <Header
-          Relogin={true}
+          Profile={true}
         />
         <Profile
-          name={"Василий"}
-          email={"ya.ru"}
+          editProfileName={selectedName}
+          editProfileEmail={selectedEmail}
+          onEditProfile={onEditProfile}
+          Relogin={handleReloginSubmit}
+        />
+        <InfoTooltip
+          isOpen={isEditRegisterPopupOpen}
+          isInfo={isInfoTool}
+          onClose={closeAllPopups}
+        />
+      </Route>
+      <Route path="/signup">
+        <Register 
+        onRegister={handleRegisterSubmit}
+        />
+        <InfoTooltip
+          isOpen={isEditRegisterPopupOpen}
+          isInfo={isInfoTool}
+          onClose={closeAllPopups}
+        />
+      </Route>
+      <Route path="/signin">
+        <Login
+        onLogin={handleAuthorizeSubmit}
+        />
+        <InfoTooltip
+          isOpen={isEditRegisterPopupOpen}
+          isInfo={isInfoTool}
+          onClose={closeAllPopups}
         />
       </Route>
       <Route path="" component={Error404} />
       </Switch>
+    </CurrentUserContext.Provider>  
     </div>
   );
 }
