@@ -26,8 +26,8 @@ function Navigation(props) {
               alt="Аккаунт"
               src={accountIcon}
             ></img>
-            <button className="navigation__bottton" type="button" to='profile' onClick={props.Relogin}>
-              Аккаунт
+            <button className="navigation__bottton" type="button" to='profile' onClick={props.onClose}>
+            <Link className='header__link_profile' to='profile'>Аккаунт</Link>
             </button>
           </div>
         </div>

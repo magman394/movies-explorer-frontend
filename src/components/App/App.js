@@ -254,10 +254,7 @@ function App() {
       <Route exact path="/">
         {loggedIn ? <Redirect to="/main" /> : <Redirect to="/signin" />}
       </Route>
-      <Route
-      path="/main"
-      loggedIn={loggedIn}
-      >
+      <Route path="/main">
         <Promo />
         <NavTab />
         <AboutProject />
