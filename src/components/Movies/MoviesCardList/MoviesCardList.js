@@ -12,7 +12,7 @@ function MoviesCardList({
   isShortFilms,
 }) {
 
-  const sortfilm = filtredMovies.filter(movie => movie.duration < 40);
+  const sortfilm = filtredMovies !== null ? filtredMovies.filter(movie => movie.duration < 40) : filtredMovies
 
     const getWidth = () => {
         if (window.innerWidth < 680) {
