@@ -7,7 +7,7 @@ function Navigation(props) {
         <div
           className={`navigation${props.isOpen ? " navigation_is-opened" : ""}`}
         >
-            <Route path='/movies'>
+
             <img
               onClick={props.onClose}
               className='navigation__close'
@@ -26,11 +26,10 @@ function Navigation(props) {
               alt="Аккаунт"
               src={accountIcon}
             ></img>
-            <button type="button" to='profile' onClick={props.Relogin}>
+            <button className="navigation__bottton" type="button" to='profile' onClick={props.Relogin}>
               Аккаунт
             </button>
           </div>
-            </Route>
         </div>
         
       );

@@ -66,3 +66,8 @@
         left: 0;
     }
   }
+.navigation__bottton {
+    background: none;
+    border: none;
+    cursor: pointer;
+}

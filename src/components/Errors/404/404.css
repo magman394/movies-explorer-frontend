@@ -32,6 +32,8 @@
   color: #3456F3;
   cursor: pointer;
   text-decoration: none;
+  background: none;
+  border: none;
 }
 @media (max-width: 768px) {
   .error-404__title {
