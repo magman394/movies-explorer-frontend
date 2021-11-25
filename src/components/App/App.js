@@ -298,6 +298,10 @@ function App() {
           onMenu={handleNavigationSubmit}
           onNavigation={closeNavigation}
         />
+        <Navigation
+          isOpen={isEditNavigationOpen}
+          onClose={closeAll}
+        />
         <SavedSearchForm
           onShortFilms={handleChangeShortFilmsFilter}
           onHandleMovies={handleSavedMovies}

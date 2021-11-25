@@ -1,8 +1,8 @@
-import { Route, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import closIcon from '../../images/close.svg';
 import accountIcon from '../../images/account.svg';
 function Navigation(props) {
-
+  const location = useLocation();
     return (
         <div
           className={`navigation${props.isOpen ? " navigation_is-opened" : ""}`}
@@ -14,10 +14,10 @@ function Navigation(props) {
               alt="Закрыть"
               src={closIcon}
             ></img>
-          <nav>
+          <nav className='navigation__links'>
             <Link className='navigation__link' to='/'>Главная</Link>
-            <Link className='navigation__link navigation__link_active' to='movies'>Фильмы</Link>
-            <Link className='navigation__link' to='saved-movies'>Сохранённые фильмы</Link>
+            <Link onClick={props.onClose} className={(location.pathname === "/movies") ? 'header__link header__link_active' : 'header__link'} to='saved-movies'>Фильмы</Link>
+            <Link onClick={props.onClose} className={(location.pathname === "/saved-movies") ? 'header__link header__link_active' : 'header__link'} to='movies'>Сохранённые фильмы</Link>
           </nav>
 
           <div className='navigation__account'>
