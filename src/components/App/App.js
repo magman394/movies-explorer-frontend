@@ -66,7 +66,7 @@ function App() {
           localStorage.setItem('email', res.email);
       } else {history.push("/signin")}
     })
-    .catch((err) => alert(err));
+    .catch((err) => console.log(err));
   }, [loggedIn]);
 
   const handleRegisterSubmit = (onRegister) => {
@@ -121,7 +121,7 @@ function App() {
         setInfoTool({ text: "Профиль изменен", img: ok });
         setEditRegisterPopupOpen(true);
       })
-      .catch(() => {
+      .catch((err) => {
         setInfoTool({
           text: "Что-то пошло не так! Попробуйте ещё раз.",
           img: error,
@@ -265,6 +265,7 @@ function App() {
       </Route>
 
       <Route exact path="/movies">
+      {loggedIn ? <Redirect to="/movies" /> : <Redirect to="/signin" />}
         <Header
           Relogin={true}
           onMenu={handleNavigationSubmit}
@@ -290,6 +291,7 @@ function App() {
         <Footer />
       </Route>
       <Route path="/saved-movies">
+      {loggedIn ? <Redirect to="/saved-movies" /> : <Redirect to="/signin" />}
         <Header
           Relogin={true}
           onMenu={handleNavigationSubmit}
@@ -315,6 +317,7 @@ function App() {
       <Footer />
       </Route>
       <Route path="/profile">
+      {loggedIn ? <Redirect to="/profile" /> : <Redirect to="/signin" />}
         <Header
           Profile={true}
         />

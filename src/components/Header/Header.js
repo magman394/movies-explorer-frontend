@@ -19,12 +19,10 @@ function Header(props) {
               alt="Аккаунт"
               src={accountIcon}
             ></img>
-            <button className='header__botton' type="button" onClick={props.Profile}>
             <Link className='header__link_profile' to='profile'>Аккаунт</Link>
-            </button>
           </div>
           <menu className='header__menu'>
-                <button className='header__botton' type="button" onClick={props.onMenu}>
+                <button className='header__button' type="button" onClick={props.onMenu}>
                     <img
                     className='header__menu_icon'
                     alt="Меню"

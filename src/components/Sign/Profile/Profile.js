@@ -1,12 +1,12 @@
 import React from "react";
 import { FormErrors } from '../FormErrors/FormErrors';
-import { Link } from "react-router-dom";
 
 class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       name: props.editProfileName,
+      nameTitle: props.editProfileName,
       email: props.editProfileEmail,
       formErrors: {name: '', email: ''},
       nameValid: false,
@@ -55,6 +55,7 @@ class Profile extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const { email, name } = this.state;
+    this.state.nameTitle = name;
     this.onEditProfile({ email, name });
   }
 
@@ -62,7 +63,7 @@ render() {
   return (
     <div className="profile">
       <form onSubmit={this.handleSubmit} className="profile__form">
-        <h2 className="profile__title">Привет, {this.state.name}!</h2>
+        <h2 className="profile__title">Привет, {this.state.nameTitle}!</h2>
         <fieldset className="profile__input_name">
           <label className="profile__input_lebel">Имя</label>
           <input
