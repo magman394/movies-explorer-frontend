@@ -306,6 +306,10 @@ function App() {
           onMenu={handleNavigationSubmit}
           onNavigation={closeNavigation}
         />
+        <Navigation
+          isOpen={isEditNavigationOpen}
+          onClose={closeAll}
+        />
         <SavedSearchForm
           onShortFilms={handleChangeShortFilmsFilter}
           onHandleMovies={handleSavedMovies}
@@ -324,6 +328,10 @@ function App() {
       <Route path="/profile">
         <Header
           Profile={true}
+        />
+        <Navigation
+          isOpen={isEditNavigationOpen}
+          onClose={closeAll}
         />
         <Profile
           editProfileName={selectedName}

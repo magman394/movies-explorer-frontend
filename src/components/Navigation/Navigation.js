@@ -16,8 +16,8 @@ function Navigation(props) {
             ></img>
           <nav className='navigation__links'>
             <Link className='navigation__link' to='/'>Главная</Link>
-            <Link onClick={props.onClose} className={(location.pathname === "/movies") ? 'header__link header__link_active' : 'header__link'} to='saved-movies'>Фильмы</Link>
-            <Link onClick={props.onClose} className={(location.pathname === "/saved-movies") ? 'header__link header__link_active' : 'header__link'} to='movies'>Сохранённые фильмы</Link>
+            <Link onClick={props.onClose} className={(location.pathname === "/movies") ? 'header__link header__link_active' : 'header__link'} to='movies'>Фильмы</Link>
+            <Link onClick={props.onClose} className={(location.pathname === "/saved-movies") ? 'header__link header__link_active' : 'header__link'} to='saved-movies'>Сохранённые фильмы</Link>
           </nav>
 
           <div className='navigation__account'>
