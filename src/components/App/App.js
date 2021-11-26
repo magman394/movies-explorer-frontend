@@ -22,6 +22,7 @@ import mainApi from "../../utils/MainApi";
 import auth from "../../utils/auth";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 import { linkMovies } from "../../utils/constants";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute"
 import {
   CurrentUserContext,
   defaultUser,
@@ -54,6 +55,7 @@ function App() {
   const [savefilms, setSavefilms] = React.useState(JSON.parse(localStorage.getItem('savefilms')));
 
 
+  const [loading, setLoading] = React.useState(true);
 
   const jwt = localStorage.getItem('token');
   React.useEffect(() => {
@@ -64,10 +66,11 @@ function App() {
           setLoggedIn(true);
           localStorage.setItem('name', res.name);
           localStorage.setItem('email', res.email);
-          history.push("/movies");
+          setLoading(false);
       } else {history.push("/signin")}
     })
     .catch((err) => console.log(err));
+
     if (loggedIn === true) {
     mainApi
     .getSaveMovies(jwt)
@@ -84,8 +87,7 @@ function App() {
       .then(() => {
         setInfoTool({ text: "Вы успешно зарегистрировались!", img: ok });
         setEditRegisterPopupOpen(true);
-        history.push("/signin");
-
+        history.push("/movies");
       })
       .catch(() => {
         setInfoTool({
@@ -254,15 +256,13 @@ function App() {
   function handleChangeShortFilmsFilter(change)  {
     setChangeShortFilm(change)
   }
-
   return (
     <div className="App">
     <CurrentUserContext.Provider value={currentUser}>
-
+    {loading ? (
+        <div>...Loading</div>
+      ) : 
       <Switch>
-      <Route exact path="/">
-        {loggedIn ? <Redirect to="/main" /> : <Redirect to="/signin" />}
-      </Route>
       <Route path="/main">
         <Promo />
         <NavTab />
@@ -273,10 +273,9 @@ function App() {
         <Footer />
       </Route>
 
-      <Route exact path="/movies">
-      {loggedIn ? <Redirect to="/movies" /> : <Redirect to="/signin" />}
+      <ProtectedRoute path="/movies"
+          loggedIn={loggedIn}>
         <Header
-          Relogin={true}
           onMenu={handleNavigationSubmit}
           onNavigation={closeNavigation}
         />
@@ -298,11 +297,11 @@ function App() {
           handleCardLike={handleCardLike}
         />
         <Footer />
-      </Route>
-      <Route path="/saved-movies">
-      {loggedIn ? <Redirect to="/saved-movies" /> : <Redirect to="/signin" />}
+      </ProtectedRoute>
+      <ProtectedRoute path="/saved-movies"
+      loggedIn={loggedIn}
+      >
         <Header
-          Relogin={true}
           onMenu={handleNavigationSubmit}
           onNavigation={closeNavigation}
         />
@@ -324,10 +323,12 @@ function App() {
           handleCardLike={handleCardLike}
         />
       <Footer />
-      </Route>
-      <Route path="/profile">
+      </ProtectedRoute>
+      <ProtectedRoute path="/profile"
+      loggedIn={loggedIn}>
         <Header
-          Profile={true}
+          onMenu={handleNavigationSubmit}
+          onNavigation={closeNavigation}
         />
         <Navigation
           isOpen={isEditNavigationOpen}
@@ -344,7 +345,7 @@ function App() {
           isInfo={isInfoTool}
           onClose={closeAllPopups}
         />
-      </Route>
+      </ProtectedRoute>
       <Route path="/signup">
         <Register 
         onRegister={handleRegisterSubmit}
@@ -366,7 +367,11 @@ function App() {
         />
       </Route>
       <Route path="" component={Error404} />
+      <Route exact path="/">
+        {loggedIn ? <Redirect to="/main" /> : <Redirect to="/signin" />}
+      </Route>
       </Switch>
+}
     </CurrentUserContext.Provider>  
     </div>
   );
