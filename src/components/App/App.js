@@ -64,9 +64,18 @@ function App() {
           setLoggedIn(true);
           localStorage.setItem('name', res.name);
           localStorage.setItem('email', res.email);
+          history.push("/movies");
       } else {history.push("/signin")}
     })
     .catch((err) => console.log(err));
+    if (loggedIn === true) {
+    mainApi
+    .getSaveMovies(jwt)
+    .then((films) => {
+      setSavefilms(films);
+    })
+    .catch((err) => alert(err));
+  }
   }, [loggedIn]);
 
   const handleRegisterSubmit = (onRegister) => {
@@ -121,7 +130,7 @@ function App() {
         setInfoTool({ text: "Профиль изменен", img: ok });
         setEditRegisterPopupOpen(true);
       })
-      .catch((err) => {
+      .catch(() => {
         setInfoTool({
           text: "Что-то пошло не так! Попробуйте ещё раз.",
           img: error,
@@ -297,10 +306,6 @@ function App() {
           onMenu={handleNavigationSubmit}
           onNavigation={closeNavigation}
         />
-        <Navigation
-          isOpen={isEditNavigationOpen}
-          onClose={closeAll}
-        />
         <SavedSearchForm
           onShortFilms={handleChangeShortFilmsFilter}
           onHandleMovies={handleSavedMovies}
@@ -317,7 +322,6 @@ function App() {
       <Footer />
       </Route>
       <Route path="/profile">
-      {loggedIn ? <Redirect to="/profile" /> : <Redirect to="/signin" />}
         <Header
           Profile={true}
         />
