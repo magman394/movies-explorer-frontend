@@ -67,6 +67,7 @@ function App() {
           localStorage.setItem('name', res.name);
           localStorage.setItem('email', res.email);
           setLoading(false);
+          history.push("/movies")
       } else {history.push("/signin")}
     })
     .catch((err) => console.log(err));
