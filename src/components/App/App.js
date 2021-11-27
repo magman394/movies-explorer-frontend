@@ -67,6 +67,7 @@ function App() {
           localStorage.setItem('name', res.name);
           localStorage.setItem('email', res.email);
           setLoading(false);
+          history.push("/movies")
       } else {history.push("/signin")}
     })
     .catch((err) => console.log(err));
@@ -87,7 +88,7 @@ function App() {
       .then(() => {
         setInfoTool({ text: "Вы успешно зарегистрировались!", img: ok });
         setEditRegisterPopupOpen(true);
-        history.push("/movies");
+        history.push("/signin");
       })
       .catch(() => {
         setInfoTool({
@@ -259,9 +260,7 @@ function App() {
   return (
     <div className="App">
     <CurrentUserContext.Provider value={currentUser}>
-    {loading ? (
-        <div>...Loading</div>
-      ) : 
+    
       <Switch>
       <Route path="/main">
         <Promo />
@@ -298,6 +297,7 @@ function App() {
         />
         <Footer />
       </ProtectedRoute>
+      
       <ProtectedRoute path="/saved-movies"
       loggedIn={loggedIn}
       >
@@ -324,6 +324,7 @@ function App() {
         />
       <Footer />
       </ProtectedRoute>
+      
       <ProtectedRoute path="/profile"
       loggedIn={loggedIn}>
         <Header
@@ -346,6 +347,7 @@ function App() {
           onClose={closeAllPopups}
         />
       </ProtectedRoute>
+      
       <Route path="/signup">
         <Register 
         onRegister={handleRegisterSubmit}
@@ -371,7 +373,7 @@ function App() {
         {loggedIn ? <Redirect to="/main" /> : <Redirect to="/signin" />}
       </Route>
       </Switch>
-}
+
     </CurrentUserContext.Provider>  
     </div>
   );
