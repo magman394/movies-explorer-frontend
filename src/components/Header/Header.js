@@ -1,10 +1,10 @@
 import React from "react";
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import accountIcon from '../../images/account.svg';
 import menuIcon from '../../images/menu-icon.svg';
 function Header(props) {
   const location = useLocation();
-  const history = useHistory();
+
     return (
 
 
