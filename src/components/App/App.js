@@ -1,7 +1,7 @@
 import React from "react";
 import Header from '../Header/Header';
 import Navigation from '../Navigation/Navigation';
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch, useHistory, Redirect } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import SearchForm from "../Movies/SearchForm/SearchForm";
 import SavedSearchForm from "../../components/SavedMovies/SavedSearchForm/SavedSearchForm";
@@ -37,6 +37,7 @@ function App() {
 
   
   const [currentUser, setCurrentUser] = React.useState(defaultUser);
+  const history = useHistory();
   const [isEditRegisterPopupOpen, setEditRegisterPopupOpen] =
   React.useState(false);
   const [isInfoTool, setInfoTool] = React.useState({ text: null, img: null });
@@ -66,10 +67,8 @@ function App() {
           localStorage.setItem('name', res.name);
           localStorage.setItem('email', res.email);
           setLoading(false);
-          <Redirect to="/movies"/>
-      } else {
-      <Redirect to="/movies"/>
-      }
+          history.push("/movies")
+      } else {history.push("/signin")}
     })
     .catch((err) => console.log(err));
 
@@ -81,7 +80,7 @@ function App() {
     })
     .catch((err) => alert(err));
   }
-
+  
   }, [loggedIn]);
 
   const handleRegisterSubmit = (onRegister) => {
@@ -90,7 +89,7 @@ function App() {
       .then(() => {
         setInfoTool({ text: "Вы успешно зарегистрировались!", img: ok });
         setEditRegisterPopupOpen(true);
-        <Redirect to="/signin"/>
+        history.push("/signin");
       })
       .catch(() => {
         setInfoTool({
@@ -111,7 +110,7 @@ function App() {
       .then((data) => {
         if (data.token) {
           setLoggedIn(true);
-          <Redirect to="/movies"/>
+          history.push("/movies");
         }
       })
       .catch(() => {
