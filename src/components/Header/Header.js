@@ -1,17 +1,18 @@
 import React from "react";
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import accountIcon from '../../images/account.svg';
 import menuIcon from '../../images/menu-icon.svg';
 function Header(props) {
   const location = useLocation();
+  const history = useHistory();
     return (
 
 
         <header className="header">
-        <Link className="header__logo" to='/main'></Link>
+         <button type="button" className="header__logo" onClick={() => {history.push("/main")}}></button>
           <nav className='header__nav'>
-            <Link className={(location.pathname === "/movies") ? 'header__link header__link_active' : 'header__link'} to='movies'>Фильмы</Link>
-            <Link className={(location.pathname === "/saved-movies") ? 'header__link header__link_active' : 'header__link'} to='saved-movies'>Сохранённые фильмы</Link>
+            <button type="button" className={(location.pathname === "/movies") ? 'header__link header__link_active' : 'header__link'} onClick={() => {history.push("/movies")}}>Фильмы</button>
+            <button type="button" className={(location.pathname === "/saved-movies") ? 'header__link header__link_active' : 'header__link'} onClick={() => {history.push("/saved-movies")}}>Сохранённые фильмы</button>
           </nav>
           <div className='header__account'>
             <img
@@ -19,7 +20,7 @@ function Header(props) {
               alt="Аккаунт"
               src={accountIcon}
             ></img>
-            <Link className='header__link_profile' to='profile'>Аккаунт</Link>
+            <button type="button" className='header__link_profile' onClick={() => {history.push("/profile")}}>Аккаунт</button>
           </div>
           <menu className='header__menu'>
                 <button className='header__button' type="button" onClick={props.onMenu}>

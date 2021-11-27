@@ -35,6 +35,8 @@
     color: rgb(0, 0, 0);
     cursor: pointer;
     text-decoration: none;
+    background: none;
+    border: none;
 }
 .navigation__close {
     padding-left: 90%;
