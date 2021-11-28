@@ -63,7 +63,7 @@ class Login extends React.Component {
     return (
       <div className="login">
         <form onSubmit={this.handleSubmit} className="login__form">
-          <Link className="login__logo" to='/main'></Link>
+          <Link className="login__logo" to='/'></Link>
           <h2 className="login__title">Рады видеть!</h2>
           <div className={`form-group ${this.errorClass(this.state.formErrors.email)}`}>
           <label className="login__input_title">

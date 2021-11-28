@@ -51,12 +51,14 @@
     }
   }
 
-.form__error {
+  .form__error {
 	color: red;
 	text-align: left;
 	font-size: 12px;
 	display: block;
 	margin-top: 3px;
+}
+.form__error_hidden {
 	display: none;
 }
 input:invalid:not(:placeholder-shown) + .form__error {

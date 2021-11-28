@@ -4,7 +4,7 @@ import Preloader from "../../Movies/Preloader/Preloader"
 
 function SavedMoviesCardList({
   onCardClick,
-  isGetMovies,
+  isGetSavedMovies,
   handleCardLike,
   onCardDelete,
   savefilms,
@@ -64,7 +64,7 @@ function SavedMoviesCardList({
             })
             }
           </section>
-           : isGetMovies === true ? 
+           : isGetSavedMovies === true ? 
            <h2 className="elements__not-found">Ничего не найдено</h2> : '' 
         }
         <section className={`more${savefilms !== null && savefilms.length > listItems  ? "" : " more_hidden"}`}>

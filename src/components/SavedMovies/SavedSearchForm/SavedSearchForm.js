@@ -1,7 +1,7 @@
 import React from "react";
 import FilterCheckbox from "../../Movies/FilterCheckbox/FilterCheckbox";
 
-function SavedSearchForm({ onSetSearchMovies, onHandleMovies, onShortFilms }) {
+function SavedSearchForm({ onSetSearchMovies, onHandleMovies, onShortFilms, notSearchSavedFilms }) {
     return (
       <div className="search">
         <form
@@ -15,13 +15,10 @@ function SavedSearchForm({ onSetSearchMovies, onHandleMovies, onShortFilms }) {
           placeholder="Фильм"
           type="text"
           onChange={(e) => {
-            onSetSearchMovies(e.target.value);
+            onSetSearchMovies(e.target.value.toLowerCase());
           }}
-          minLength="2"
-          maxLength="40"
-          required
           />
-          <span id="Movies-error" className="form__error">Минимальная длина 2 символа.</span>
+          <span className={notSearchSavedFilms ? "form__error" : "form__error_hidden" }>Нужно ввести ключевое слово.</span>
       <button
         className="search__form_button"
         type="submit"

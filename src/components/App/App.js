@@ -31,7 +31,7 @@ import error from "../../images/error.svg";
 import ok from "../../images/ok.svg";
 function App() {
   const [isAddRegister, setAddRegister] = React.useState(false);
-  const [loggedIn, setLoggedIn] = React.useState(false);
+
   const [selectedEmail, setSelectedEmail] = React.useState(localStorage.getItem('email'));
   const [selectedName, setSelectedName] = React.useState(localStorage.getItem('name'));
 
@@ -43,53 +43,46 @@ function App() {
   const [isInfoTool, setInfoTool] = React.useState({ text: null, img: null });
   const closeAllPopups = () => {
     setEditRegisterPopupOpen(false);
-    if (isAddRegister === true) history.push("/signin");
-    setInfoTool({ text: null, img: null });
   };
   const [isEditNavigationOpen, setEditNavigationOpen] =
     React.useState(false);
   const [changeShortFilm, setChangeShortFilm] = React.useState();
   const [searchMovies, setSearchMovies] = React.useState(JSON.parse(localStorage.getItem('search')));
   const [filtredMovies, setFiltredMovies] = React.useState(JSON.parse(localStorage.getItem('films')));
-  const [isGetMovies, setGetMovies] = React.useState(false);
+  const [isGetMovies, setGetMovies] = React.useState();
+  const [isGetSavedMovies, setGetSavedMovies] = React.useState();
   const [savefilms, setSavefilms] = React.useState(JSON.parse(localStorage.getItem('savefilms')));
-
 
   const [loading, setLoading] = React.useState(true);
 
   const jwt = localStorage.getItem('token');
-  React.useEffect(() => {
-    auth
+  const tokenCheck = () => {
+    setTimeout(() => {
+      auth
       .authorizeToken(jwt)
       .then((res) => {
-      if (res){
-          setLoggedIn(true);
-          localStorage.setItem('name', res.name);
-          localStorage.setItem('email', res.email);
-          setLoading(false);
-          history.push("/movies")
-      } else {history.push("/signin")}
+      if (res) {
+        localStorage.setItem('login', true);
+      } 
     })
     .catch((err) => console.log(err));
+      setLoading(false);
+    }, 200);
+  };
 
-    if (loggedIn === true) {
-    mainApi
-    .getSaveMovies(jwt)
-    .then((films) => {
-      setSavefilms(films);
-    })
-    .catch((err) => alert(err));
-  }
-  
-  }, [loggedIn]);
+  React.useEffect(() => {
+    tokenCheck();
+  }, []);
 
   const handleRegisterSubmit = (onRegister) => {
     auth
       .register(onRegister)
-      .then(() => {
-        setInfoTool({ text: "Вы успешно зарегистрировались!", img: ok });
-        setEditRegisterPopupOpen(true);
-        history.push("/signin");
+      .then((res) => {
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('login', true);
+        localStorage.setItem('name', res.name);
+        localStorage.setItem('email', res.email);
+        history.push("/movies");
       })
       .catch(() => {
         setInfoTool({
@@ -99,22 +92,23 @@ function App() {
         setEditRegisterPopupOpen(true);
       });
   };
-
   const handleAuthorizeSubmit = (onLogin) => {
     if (!onLogin) {
       return;
-
     }
     auth
       .authorize(onLogin)
       .then((data) => {
         if (data.token) {
-          setLoggedIn(true);
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('login', true);
+          localStorage.setItem('name', data.name);
+          localStorage.setItem('email', data.email);
           history.push("/movies");
         }
       })
       .catch(() => {
-        setLoggedIn(false);
+
         setEditRegisterPopupOpen(true);
         setInfoTool({
           text: "Что-то пошло не так! Попробуйте ещё раз.",
@@ -122,9 +116,7 @@ function App() {
         });
       });
   };
-
   function onEditProfile(currentUser) {
-
     mainApi
       .setUserInfo(currentUser, jwt)
       .then((response) => {
@@ -142,14 +134,16 @@ function App() {
       });
   }
   function handleReloginSubmit() {
-    localStorage.removeItem("token");
-    history.push("/signin");
-    setLoggedIn(false);
+    localStorage.clear();
+    setSearchMovies([]);
+    setFiltredMovies([]);
+    setSavefilms([]);
+    history.push("/");
   }
-
+  const [notSearchFilms, setNotSearchFilms] = React.useState(false);
   const handleMovies = (e) => {
     e.preventDefault();
-    if(searchMovies.length > 1) {
+    if(searchMovies.length > 0) {
     moviesApi
         .getMovies()
         .then((films) => {
@@ -164,18 +158,30 @@ function App() {
 
         })
         .catch((err) => alert(err));
-      }
-
+      mainApi
+      .getSaveMovies(jwt)
+      .then((films) => {
+        setSavefilms(films);
+      })
+      .catch((err) => alert(err));
+    } else {
+      setNotSearchFilms(true);
+    }
+    setGetMovies(true);
   }
+  const [notSearchSavedFilms, setNotSearchSavedFilms] = React.useState(false);
   const handleSavedMovies = (e) => {
     e.preventDefault();
-    if(searchMovies.length > 1) {
+    if(searchMovies.length > 0) {
       setSavefilms(
         savefilms.filter((item) => {
         return item.nameRU.includes(searchMovies);
       })
       )
-     }
+     } else {
+      setNotSearchSavedFilms(true);
+    }
+    setGetSavedMovies(true);
   }
 
   localStorage.setItem('search', JSON.stringify(searchMovies));
@@ -199,7 +205,6 @@ function App() {
       setCurrentUser(user);
     })
     .catch((err) => alert(err));
-    setGetMovies(true)
 
     mainApi
       .changeLikeCardStatus({   
@@ -261,20 +266,12 @@ function App() {
   return (
     <div className="App">
     <CurrentUserContext.Provider value={currentUser}>
-    
+    {loading ? (
+        <div>...Loading</div>
+      ) : (
       <Switch>
-      <Route path="/main">
-        <Promo />
-        <NavTab />
-        <AboutProject />
-        <Techs />
-        <AboutMe />
-        <Portfolio />
-        <Footer />
-      </Route>
 
-      <ProtectedRoute path="/movies"
-          loggedIn={loggedIn}>
+      <ProtectedRoute path="/movies">
         <Header
           onMenu={handleNavigationSubmit}
           onNavigation={closeNavigation}
@@ -287,6 +284,7 @@ function App() {
           onShortFilms={handleChangeShortFilmsFilter}
           onHandleMovies={handleMovies}
           onSetSearchMovies={setSearchMovies}
+          notSearchFilms={notSearchFilms}
         />
         <MoviesCardList
           isShortFilms={changeShortFilm}
@@ -299,9 +297,7 @@ function App() {
         <Footer />
       </ProtectedRoute>
       
-      <ProtectedRoute path="/saved-movies"
-      loggedIn={loggedIn}
-      >
+      <ProtectedRoute path="/saved-movies">
         <Header
           onMenu={handleNavigationSubmit}
           onNavigation={closeNavigation}
@@ -314,20 +310,20 @@ function App() {
           onShortFilms={handleChangeShortFilmsFilter}
           onHandleMovies={handleSavedMovies}
           onSetSearchMovies={setSearchMovies}
+          notSearchSavedFilms={notSearchSavedFilms}
         />
         <SavedMoviesCardList
           isShortFilms={changeShortFilm}
           savefilms={savefilms}
           filtredMovies={filtredMovies}
           searchMovies={searchMovies}
-          isGetMovies={isGetMovies}
+          isGetSavedMovies={isGetSavedMovies}
           handleCardLike={handleCardLike}
         />
       <Footer />
       </ProtectedRoute>
       
-      <ProtectedRoute path="/profile"
-      loggedIn={loggedIn}>
+      <ProtectedRoute path="/profile">
         <Header
           onMenu={handleNavigationSubmit}
           onNavigation={closeNavigation}
@@ -369,12 +365,26 @@ function App() {
           onClose={closeAllPopups}
         />
       </Route>
-      <Route path="" component={Error404} />
       <Route exact path="/">
-        {loggedIn ? <Redirect to="/main" /> : <Redirect to="/signin" />}
+        <Promo
+          onMenu={handleNavigationSubmit}
+        />
+        <Navigation
+          isOpen={isEditNavigationOpen}
+          onClose={closeAll}
+        />
+        <NavTab />
+        <AboutProject />
+        <Techs />
+        <AboutMe />
+        <Portfolio />
+        <Footer />
       </Route>
-      </Switch>
 
+      <Route path="" component={Error404} />
+
+      </Switch>
+)}
     </CurrentUserContext.Provider>  
     </div>
   );

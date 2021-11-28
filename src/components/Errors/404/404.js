@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 function Error404() {
     const history = useHistory();
     function handleClick() {
-        history.push("/main");
+        history.push("/");
     }
     return (
         <div className="error-404">

@@ -1,7 +1,6 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
-
-function ProtectedRoute({ loggedIn, children, redirect }) {
-    return loggedIn ? children : <Redirect to="/signin" />;
+import { Redirect } from "react-router-dom";
+function ProtectedRoute({ children }) {
+    return localStorage.getItem('login') ? children : <Redirect to="/" />;
   }
 export default ProtectedRoute;

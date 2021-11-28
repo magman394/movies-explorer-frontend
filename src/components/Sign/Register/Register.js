@@ -71,7 +71,7 @@ class Register extends React.Component {
     return (
       <div className="register">
         <form onSubmit={this.handleSubmit} className="register__form">
-          <Link className="register__logo" to='/main'></Link>
+          <Link className="register__logo" to='/'></Link>
           <h2 className="register__title">Добро пожаловать!</h2>
           <div className={`form-group ${this.errorClass(this.state.formErrors.email)}`}>
           <label className="register__input_title">

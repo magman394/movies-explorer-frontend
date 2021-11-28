@@ -5,9 +5,9 @@ class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: props.editProfileName,
+      name: localStorage.getItem('name'),
       nameTitle: props.editProfileName,
-      email: props.editProfileEmail,
+      email: localStorage.getItem('email'),
       formErrors: {name: '', email: ''},
       nameValid: false,
       emailValid: false,
@@ -57,6 +57,7 @@ class Profile extends React.Component {
     const { email, name } = this.state;
     this.state.nameTitle = name;
     this.onEditProfile({ email, name });
+    this.state.formValid = false
   }
 
 render() {

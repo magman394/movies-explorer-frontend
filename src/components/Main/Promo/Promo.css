@@ -2,6 +2,40 @@
   background-color: #DDDEE3;
   margin: 0 -70px;
 }
+.promo__account {
+  display: flex;
+  align-items: center;    
+  font-family: Inter;
+  box-sizing: border-box;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  padding: 8px 12px;
+  border: 2px solid rgba(0,0,0,0.2);
+  border-radius: 50px;
+  margin-right: 70px;
+}
+.promo__account_icon {
+  padding-right: 8px;
+  max-width: 12px;
+  height: 14px;
+  border: none;
+}
+.promo__link_profile {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  text-align: right;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  background: none;
+
+}
 .promo__header {
   display: flex;
   justify-content: space-between;
@@ -91,13 +125,31 @@
   max-width: 320px;
   min-height: 320px;
 }
-
+.promo__login-header_menu {
+  display: none;
+}
+.promo__button {
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0 14px;
+}
 @media (max-width: 768px) {
+  .promo__login-header_menu {
+    display: flex;
+    justify-content: space-between;
+}
   .promo {
     margin: 0 -50px;
   }
+  .promo__header {
+    display: none;
+  }
   .promo__logo {
     margin: 0 30px;
+  }
+  .promo__account {
+    margin-right: 30px;
   }
   .promo__nav {
     padding: 0 30px;
@@ -106,10 +158,17 @@
     padding: 224px 0 240px;
   }
 }
+.promo__menu {
+  margin: 0;
+  display: none; 
+}
 @media (max-width: 700px) {
   .promo {
     margin: 0 -30px;
   }
+  .promo__menu {
+    display: flex; 
+}
   .promo__header {
     padding: 20px 0;
   }
@@ -138,6 +197,9 @@
   .promo__logo {
     margin: 0 14px;
   }
+  .promo__account {
+    margin-right: 14px;
+  }
   .promo__nav {
     padding: 0 14px;
   }
@@ -145,5 +207,8 @@
 @media (max-width: 480px) {
   .promo {
     margin: 0 -10px;
+  }
+  .promo__menu {
+    margin-right: 0;
   }
 }
