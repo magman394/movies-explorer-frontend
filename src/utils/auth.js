@@ -62,7 +62,7 @@ class Auth {
       } 
     }
     const auth = new Auth({
-        url: 'http://localhost:3000'
+        url: 'https://diplom.nomoredomains.monster'
        });
       
     
