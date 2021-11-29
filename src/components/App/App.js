@@ -221,7 +221,7 @@ function App() {
         thumbnail: thumbnail,
         movieId: id,
         user: currentUser,
-      }, !isLiked, jwt)
+      }, !isLiked, localStorage.getItem('token'))
       .then(() => {
         mainApi
           .getSaveMovies(jwt)
