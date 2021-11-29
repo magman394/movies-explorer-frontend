@@ -63,6 +63,7 @@ function App() {
       .then((res) => {
       if (res) {
         localStorage.setItem('login', true);
+
       } 
     })
     .catch((err) => console.log(err));
@@ -105,6 +106,12 @@ function App() {
           localStorage.setItem('name', data.name);
           localStorage.setItem('email', data.email);
           history.push("/movies");
+          mainApi
+          .getSaveMovies(localStorage.getItem('token'))
+          .then((films) => {
+            setSavefilms(films);
+          })
+          .catch((err) => alert(err));
         }
       })
       .catch(() => {
@@ -118,7 +125,7 @@ function App() {
   };
   function onEditProfile(currentUser) {
     mainApi
-      .setUserInfo(currentUser, jwt)
+      .setUserInfo(currentUser, localStorage.getItem('token'))
       .then((response) => {
         setCurrentUser(response);
         localStorage.setItem('name', response.name);
@@ -152,7 +159,7 @@ function App() {
           })
             setFiltredMovies(
               films.filter((item) => {
-              return item.nameRU.includes(searchMovies);
+              return item.nameRU.toLowerCase().includes(searchMovies);
             })
             )
 
@@ -175,7 +182,7 @@ function App() {
     if(searchMovies.length > 0) {
       setSavefilms(
         savefilms.filter((item) => {
-        return item.nameRU.includes(searchMovies);
+        return item.nameRU.toLowerCase().includes(searchMovies);
       })
       )
      } else {
@@ -199,12 +206,6 @@ function App() {
     isLiked,
     thumbnail
   ) {
-    mainApi
-    .getUserInfo(jwt)
-    .then((user) => {
-      setCurrentUser(user);
-    })
-    .catch((err) => alert(err));
 
     mainApi
       .changeLikeCardStatus({   
@@ -214,7 +215,7 @@ function App() {
         year: year ? year : 'пусто',
         description: description ? description : 'пусто',
         image: linkMovies + image.url,
-        trailer: trailerLink ? trailerLink : 'пусто',
+        trailer: trailerLink ? trailerLink : "https://www.youtube.com/",
         nameRU: nameRU,
         nameEN: nameEN ? nameEN : 'пусто',
         thumbnail: thumbnail,
@@ -237,7 +238,7 @@ function App() {
             })
               setFiltredMovies(
                 films.filter((item) => {
-                return item.nameRU.includes(searchMovies);
+                return item.nameRU.toLowerCase().includes(searchMovies);
               })
               )
         })
@@ -285,6 +286,7 @@ function App() {
           onHandleMovies={handleMovies}
           onSetSearchMovies={setSearchMovies}
           notSearchFilms={notSearchFilms}
+          isShortFilms={changeShortFilm}
         />
         <MoviesCardList
           isShortFilms={changeShortFilm}
@@ -346,6 +348,7 @@ function App() {
       </ProtectedRoute>
       
       <Route path="/signup">
+      {localStorage.getItem('login') ? <Redirect to="/" /> : <Redirect to="/signup" />}
         <Register 
         onRegister={handleRegisterSubmit}
         />
@@ -356,6 +359,7 @@ function App() {
         />
       </Route>
       <Route path="/signin">
+      {localStorage.getItem('login') ? <Redirect to="/" /> : <Redirect to="/signin" />}
         <Login
         onLogin={handleAuthorizeSubmit}
         />
@@ -380,9 +384,7 @@ function App() {
         <Portfolio />
         <Footer />
       </Route>
-
       <Route path="" component={Error404} />
-
       </Switch>
 )}
     </CurrentUserContext.Provider>  

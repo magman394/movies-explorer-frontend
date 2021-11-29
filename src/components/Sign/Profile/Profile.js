@@ -6,7 +6,7 @@ class Profile extends React.Component {
     super(props);
     this.state = {
       name: localStorage.getItem('name'),
-      nameTitle: props.editProfileName,
+      nameTitle: localStorage.getItem('name'),
       email: localStorage.getItem('email'),
       formErrors: {name: '', email: ''},
       nameValid: false,

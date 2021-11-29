@@ -4,7 +4,7 @@ import Switch from "react-switch";
 class FilterCheckbox extends Component {
   constructor(props) {
     super(props);
-    this.state = { checked: false };
+    this.state = { checked: props.isShortFilms };
     this.handleChangeShortFilmsFilter = props.onShortFilms;
     this.handleChange = this.handleChange.bind(this);
   }
