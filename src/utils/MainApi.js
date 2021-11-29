@@ -77,7 +77,6 @@ class MainApi {
         .then(res => this._getResponseData(res))
       }
       setUserInfo(onUpdateUser, jwt) {
-        console.log(jwt)
         return fetch(`${this.url}/api/users/me`, {
           method: "PATCH",
           headers: {
@@ -101,7 +100,7 @@ class MainApi {
   }
   
   const mainApi = new MainApi({
-    url: 'http://localhost:3000',
+    url: 'https://diplom.nomoredomains.monster',
     });
   export default mainApi;
     
