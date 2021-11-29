@@ -145,6 +145,7 @@ function App() {
     setSearchMovies([]);
     setFiltredMovies([]);
     setSavefilms([]);
+    setNotSearchFilms(false);
     history.push("/");
   }
   const [notSearchFilms, setNotSearchFilms] = React.useState(false);
@@ -215,14 +216,15 @@ function App() {
         year: year ? year : 'пусто',
         description: description ? description : 'пусто',
         image: linkMovies + image.url,
-        trailer: trailerLink ? trailerLink : "https://www.youtube.com/",
+        trailer: trailerLink ? trailerLink : 'https://www.youtube.com/',
         nameRU: nameRU,
         nameEN: nameEN ? nameEN : 'пусто',
         thumbnail: thumbnail,
         movieId: id,
         user: currentUser,
-      }, !isLiked, localStorage.getItem('token'))
-      .then(() => {
+      }, !isLiked, jwt)
+      .then((film) => {
+        film.isLiked = true;
         mainApi
           .getSaveMovies(jwt)
           .then((films) => {
