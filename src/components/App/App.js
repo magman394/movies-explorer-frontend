@@ -222,8 +222,7 @@ function App() {
         movieId: id,
         user: currentUser,
       }, !isLiked, jwt)
-      .then((send) => {
-
+      .then(() => {
         mainApi
           .getSaveMovies(jwt)
           .then((films) => {
@@ -313,6 +312,7 @@ function App() {
           onHandleMovies={handleSavedMovies}
           onSetSearchMovies={setSearchMovies}
           notSearchSavedFilms={notSearchSavedFilms}
+          isShortFilms={changeShortFilm}
         />
         <SavedMoviesCardList
           isShortFilms={changeShortFilm}

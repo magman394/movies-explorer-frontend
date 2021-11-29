@@ -1,7 +1,7 @@
 import React from "react";
 import FilterCheckbox from "../../Movies/FilterCheckbox/FilterCheckbox";
 
-function SavedSearchForm({ onSetSearchMovies, onHandleMovies, onShortFilms, notSearchSavedFilms }) {
+function SavedSearchForm({ onSetSearchMovies, onHandleMovies, onShortFilms, notSearchSavedFilms, isShortFilms }) {
     return (
       <div className="search">
         <form
@@ -26,6 +26,7 @@ function SavedSearchForm({ onSetSearchMovies, onHandleMovies, onShortFilms, notS
       />
     </form>
         <FilterCheckbox 
+        isShortFilms={isShortFilms}
         onShortFilms={onShortFilms}
         />
       </div>
