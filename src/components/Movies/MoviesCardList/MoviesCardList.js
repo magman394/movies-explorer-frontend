@@ -85,7 +85,7 @@ function MoviesCardList({
         <section className={`more${filtredMovies !== null && filtredMovies.length > listItems  ? "" : " more_hidden"}`}>
             <button
               className="more__button"
-              onClick={() => setListItems(listItems + listItems)}
+              onClick={() => setListItems(listItems + Math.floor(listItems/4))}
             >
                 Еще
             </button>

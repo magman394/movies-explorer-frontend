@@ -46,7 +46,7 @@ function App() {
   };
   const [isEditNavigationOpen, setEditNavigationOpen] =
     React.useState(false);
-  const [changeShortFilm, setChangeShortFilm] = React.useState();
+  const [changeShortFilm, setChangeShortFilm] = React.useState(false);
   const [searchMovies, setSearchMovies] = React.useState(JSON.parse(localStorage.getItem('search')));
   const [filtredMovies, setFiltredMovies] = React.useState(JSON.parse(localStorage.getItem('films')));
   const [isGetMovies, setGetMovies] = React.useState();
