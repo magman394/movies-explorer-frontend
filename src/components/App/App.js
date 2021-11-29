@@ -145,7 +145,7 @@ function App() {
     setSearchMovies([]);
     setFiltredMovies([]);
     setSavefilms([]);
-    setNotSearchFilms(false);
+    setNotSearchFilms(true);
     history.push("/");
   }
   const [notSearchFilms, setNotSearchFilms] = React.useState(false);
