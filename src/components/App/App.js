@@ -170,12 +170,14 @@ function App() {
     setGetMovies(true);
   }
   const [notSearchSavedFilms, setNotSearchSavedFilms] = React.useState(false);
+  const [searchSaveMovies, setSearchSaveMovies] = React.useState(JSON.parse(localStorage.getItem('searchSave')));
+
   const handleSavedMovies = (e) => {
     e.preventDefault();
-    if(searchMovies.length > 0) {
+    if(searchSaveMovies.length > 0) {
       setSavefilms(
         savefilms.filter((item) => {
-        return item.nameRU.includes(searchMovies);
+        return item.nameRU.toLowerCase().includes(searchSaveMovies);
       })
       )
      } else {
@@ -183,7 +185,7 @@ function App() {
     }
     setGetSavedMovies(true);
   }
-
+  localStorage.setItem('searchSave', JSON.stringify(searchSaveMovies));
   localStorage.setItem('search', JSON.stringify(searchMovies));
   function handleCardLike(
     country,
@@ -309,8 +311,8 @@ function App() {
         />
         <SavedSearchForm
           onShortFilms={handleChangeShortFilmsFilter}
-          onHandleMovies={handleMovies}
-          onSetSearchMovies={setSearchMovies}
+          onHandleMovies={handleSavedMovies}
+          onSetSearchMovies={setSearchSaveMovies}
           notSearchSavedFilms={notSearchSavedFilms}
           isShortFilms={changeShortFilm}
         />
