@@ -63,7 +63,6 @@ function App() {
       .then((res) => {
       if (res) {
         localStorage.setItem('login', true);
-
       } 
     })
     .catch((err) => console.log(err));
@@ -106,12 +105,6 @@ function App() {
           localStorage.setItem('name', data.name);
           localStorage.setItem('email', data.email);
           history.push("/movies");
-          mainApi
-          .getSaveMovies(localStorage.getItem('token'))
-          .then((films) => {
-            setSavefilms(films);
-          })
-          .catch((err) => alert(err));
         }
       })
       .catch(() => {
@@ -125,7 +118,7 @@ function App() {
   };
   function onEditProfile(currentUser) {
     mainApi
-      .setUserInfo(currentUser, localStorage.getItem('token'))
+      .setUserInfo(currentUser, jwt)
       .then((response) => {
         setCurrentUser(response);
         localStorage.setItem('name', response.name);
@@ -145,8 +138,6 @@ function App() {
     setSearchMovies([]);
     setFiltredMovies([]);
     setSavefilms([]);
-    setNotSearchFilms(false);
-    setGetMovies(false);
     history.push("/");
   }
   const [notSearchFilms, setNotSearchFilms] = React.useState(false);
@@ -184,7 +175,7 @@ function App() {
     if(searchMovies.length > 0) {
       setSavefilms(
         savefilms.filter((item) => {
-        return item.nameRU.toLowerCase().includes(searchMovies);
+        return item.nameRU.includes(searchMovies);
       })
       )
      } else {
@@ -208,7 +199,13 @@ function App() {
     isLiked,
     thumbnail
   ) {
-    console.log(isLiked)
+    mainApi
+    .getUserInfo(jwt)
+    .then((user) => {
+      setCurrentUser(user);
+    })
+    .catch((err) => alert(err));
+
     mainApi
       .changeLikeCardStatus({   
         country: country ? country : 'пусто',
@@ -217,27 +214,35 @@ function App() {
         year: year ? year : 'пусто',
         description: description ? description : 'пусто',
         image: linkMovies + image.url,
-        trailer: trailerLink ? trailerLink : 'https://www.youtube.com/',
+        trailer: trailerLink ? trailerLink : 'пусто',
         nameRU: nameRU,
         nameEN: nameEN ? nameEN : 'пусто',
         thumbnail: thumbnail,
         movieId: id,
         user: currentUser,
-        isLiked: !isLiked
       }, !isLiked, jwt)
-      .then((film) => {
-        mainApi
-        .getSaveMovies(jwt)
-        .then((films) => {
-          setSavefilms(films);
-        })
-        .catch((err) => alert(err));
-        filtredMovies
-        .filter(e => savefilms.map(e2 => e2.movieId).includes(e.id))
-        .map(e => {
-          e.isLiked = !isLiked
-        });
+      .then((send) => {
 
+        mainApi
+          .getSaveMovies(jwt)
+          .then((films) => {
+            setSavefilms(films);
+          })
+          .catch((err) => alert(err));
+        moviesApi
+          .getMovies()
+          .then((films) => {
+            films.map(e => {
+              e.isLiked = false
+            })
+              setFiltredMovies(
+                films.filter((item) => {
+                return item.nameRU.toLowerCase().includes(searchMovies);
+              })
+              )
+        })
+          .catch((err) => alert(err));
+          
       })
       .catch((err) => alert(err));
   }
@@ -304,7 +309,7 @@ function App() {
         />
         <SavedSearchForm
           onShortFilms={handleChangeShortFilmsFilter}
-          onHandleMovies={handleSavedMovies}
+          onHandleMovies={handleMovies}
           onSetSearchMovies={setSearchMovies}
           notSearchSavedFilms={notSearchSavedFilms}
           isShortFilms={changeShortFilm}
@@ -343,7 +348,6 @@ function App() {
       </ProtectedRoute>
       
       <Route path="/signup">
-      {localStorage.getItem('login') ? <Redirect to="/" /> : <Redirect to="/signup" />}
         <Register 
         onRegister={handleRegisterSubmit}
         />
@@ -354,7 +358,6 @@ function App() {
         />
       </Route>
       <Route path="/signin">
-      {localStorage.getItem('login') ? <Redirect to="/" /> : <Redirect to="/signin" />}
         <Login
         onLogin={handleAuthorizeSubmit}
         />
@@ -379,7 +382,9 @@ function App() {
         <Portfolio />
         <Footer />
       </Route>
+
       <Route path="" component={Error404} />
+
       </Switch>
 )}
     </CurrentUserContext.Provider>  

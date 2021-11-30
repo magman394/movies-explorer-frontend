@@ -27,7 +27,6 @@ class MainApi {
         nameEN,
         thumbnail,
         movieId,
-        isLiked,
       }, check, jwt) {
         if(check === true) {
           return fetch(`${this.url}/api/movies`, {
@@ -51,7 +50,6 @@ class MainApi {
               "nameEN": nameEN,
               "thumbnail": thumbnail,
               "movieId": movieId,
-              "isLiked": isLiked,
             })
           })
           .then(res => this._getResponseData(res))
@@ -102,7 +100,7 @@ class MainApi {
   }
   
   const mainApi = new MainApi({
-    url: 'https://diplom.nomoredomains.monster',
+    url: 'http://localhost:3000',
     });
   export default mainApi;
     
