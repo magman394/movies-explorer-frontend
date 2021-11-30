@@ -208,7 +208,7 @@ function App() {
     isLiked,
     thumbnail
   ) {
-
+    console.log(isLiked)
     mainApi
       .changeLikeCardStatus({   
         country: country ? country : 'пусто',
@@ -223,29 +223,21 @@ function App() {
         thumbnail: thumbnail,
         movieId: id,
         user: currentUser,
+        isLiked: !isLiked
       }, !isLiked, jwt)
       .then((film) => {
-        film.isLiked = true;
         mainApi
-          .getSaveMovies(jwt)
-          .then((films) => {
-            setSavefilms(films);
-          })
-          .catch((err) => alert(err));
-        moviesApi
-          .getMovies()
-          .then((films) => {
-            films.map(e => {
-              e.isLiked = false
-            })
-              setFiltredMovies(
-                films.filter((item) => {
-                return item.nameRU.toLowerCase().includes(searchMovies);
-              })
-              )
+        .getSaveMovies(jwt)
+        .then((films) => {
+          setSavefilms(films);
         })
-          .catch((err) => alert(err));
-          
+        .catch((err) => alert(err));
+        filtredMovies
+        .filter(e => savefilms.map(e2 => e2.movieId).includes(e.id))
+        .map(e => {
+          e.isLiked = !isLiked
+        });
+
       })
       .catch((err) => alert(err));
   }

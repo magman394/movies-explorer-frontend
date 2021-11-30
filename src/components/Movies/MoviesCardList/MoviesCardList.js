@@ -44,11 +44,11 @@ function MoviesCardList({
           <section className="elements">
             { !isShortFilms ?
             filtredMovies.slice(0, listItems).map((item) => {
-              filtredMovies
-              .filter(e => savefilms.map(e2 => e2.movieId).includes(e.id))
-              .map(e => {
-                e.isLiked = true
-              });
+              // filtredMovies
+              // .filter(e => savefilms.map(e2 => e2.movieId).includes(e.id))
+              // .map(e => {
+              //   e.isLiked = true
+              // });
           
               return (
                   <MoviesCard
@@ -61,11 +61,11 @@ function MoviesCardList({
               );
             }) : 
             sortfilm.slice(0, listItems).map((item) => {
-              filtredMovies
-              .filter(e => savefilms.map(e2 => e2.movieId).includes(e.id))
-              .map(e => {
-                e.isLiked = true
-              });
+              // filtredMovies
+              // .filter(e => savefilms.map(e2 => e2.movieId).includes(e.id))
+              // .map(e => {
+              //   e.isLiked = true
+              // });
           
               return (
                   <MoviesCard
