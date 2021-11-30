@@ -14,12 +14,18 @@ function Navigation(props) {
               alt="Закрыть"
               src={closIcon}
             ></img>
+          { localStorage.getItem('login') ? 
           <nav className='navigation__links'>
             <Link className='navigation__link' to='/'>Главная</Link>
             <Link onClick={props.onClose} className={(location.pathname === "/movies") ? 'header__link header__link_active' : 'header__link'} to='movies'>Фильмы</Link>
             <Link onClick={props.onClose} className={(location.pathname === "/saved-movies") ? 'header__link header__link_active' : 'header__link'} to='saved-movies'>Сохранённые фильмы</Link>
           </nav>
-
+            : 
+          <nav className='navigation__links'>
+            <Link onClick={props.onClose} className='navigation__link' to='signup'>Регистрация</Link>
+            <Link onClick={props.onClose} className='navigation__link' to='signin'>Войти</Link>
+          </nav>
+          }
           <div className='navigation__account'>
             <img
               className='navigation__account_icon'

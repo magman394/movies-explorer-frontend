@@ -63,6 +63,22 @@
     max-width: 12px;
     height: 14px;
 }
+.header__link_hidden {
+    display: none;
+}
+.navigation__link {
+    font-family: Inter;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    text-align: right;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    background: none;
+}
 @media (max-width: 480px) {
     .navigation {
         left: 0;

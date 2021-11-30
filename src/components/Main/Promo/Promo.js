@@ -45,7 +45,18 @@ function Promo(props) {
             <Link className='promo__auth-link' to='signin'>Войти</Link>
           </nav>
         </div> }
-
+        <div className="promo__login-header_menu">
+        <Link className="promo__logo" to=''></Link>
+        <menu className='promo__menu'>
+                <button className='promo__button' type="button" onClick={props.onMenu}>
+                    <img
+                    className='header__menu_icon'
+                    alt="Меню"
+                    src={menuIcon}
+                    ></img>
+                </button>
+          </menu>
+          </div>
         
           <div className="promo__banner">
               <h1 className="promo__banner_title">Учебный проект студента факультета Веб-разработки.</h1>
