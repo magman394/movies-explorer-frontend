@@ -100,7 +100,7 @@ class MainApi {
   }
   
   const mainApi = new MainApi({
-    url: 'http://diplom.nomoredomains.monster',
+    url: 'https://diplom.nomoredomains.monster',
     });
   export default mainApi;
     
