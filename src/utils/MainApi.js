@@ -102,7 +102,7 @@ class MainApi {
   }
   
   const mainApi = new MainApi({
-    url: 'http://localhost:3000',
+    url: 'https://diplom.nomoredomains.monster',
     });
   export default mainApi;
     
