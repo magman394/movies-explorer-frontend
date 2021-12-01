@@ -1,7 +1,7 @@
 import React from "react";
-import FilterCheckbox from "../FilterCheckbox/FilterCheckbox";
+import FilterCheckbox from "../../Movies/FilterCheckbox/FilterCheckbox";
 
-function SearchForm({ onSetSearchMovies, onHandleMovies, onShortFilms, notSearchFilms, isShortFilms }) {
+function SavedSearchForm({ onSetSearchMovies, onHandleMovies, onShortFilms, notSearchSavedFilms, isShortFilms }) {
     return (
       <div className="search">
         <form
@@ -18,7 +18,7 @@ function SearchForm({ onSetSearchMovies, onHandleMovies, onShortFilms, notSearch
             onSetSearchMovies(e.target.value.toLowerCase());
           }}
           />
-          <span className={notSearchFilms ? "form__error" : "form__error_hidden" }>Нужно ввести ключевое слово.</span>
+          <span className={notSearchSavedFilms ? "form__error" : "form__error_hidden" }>Нужно ввести ключевое слово.</span>
       <button
         className="search__form_button"
         type="submit"
@@ -32,4 +32,4 @@ function SearchForm({ onSetSearchMovies, onHandleMovies, onShortFilms, notSearch
       </div>
   );
 }
-export default SearchForm;
+export default SavedSearchForm;
